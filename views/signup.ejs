@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("partials/header.ejs") %>
+    <title>Signup</title>
+</head>
+
+<body>
+    <%- include("partials/navbar.ejs") %>
+
+    <form action="/user/signup" method="POST" class="container mt-4">
+        <input type="text" name="fullname" class="form-control" placeholder="Full Name">
+        <input type="email" name="email" class="form-control" placeholder="Email">
+        <input type="password" name="password" class="form-control" placeholder="Password">
+        <button class="btn btn-primary mt-3">Sign Up</button>
+    </form>
+
+    <%- include("partials/script.ejs") %>
+</body>
+</html>
