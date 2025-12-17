@@ -1,81 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <%- include("partials/header.ejs") %>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Blog App</title>
-</head>
-<body>
-  <%- include('partials/navbar.ejs') -%>
-  <div class="container mt-3 ">
-        <h1> <%= blog.title %></h1>
-        <img src="<%= blog.coverImage %>" width="500px"/>
-        <pre class="mt-3" style="font-family: Arial, Helvetica, sans-serif ; color: black; font-size: medium;">    <%= blog.body %></pre>
-      </div>  
-     <div class="container mt-3 d-flex align-items-center gap-3">
-       <img  
-        src="<%= blog.createdBY.profileImage %>" 
-        width="70px" 
-        height="70px"
-        style="border-radius: 50%; object-fit: cover;"
-        alt="user profile"
-    />
 
-    <h4><%= blog.createdBY.fullname %></h4>
-</div>
+    <style>
+      .blog-cover {
+        width: 100%;
+        max-height: 420px;
+        object-fit: cover;
+        border-radius: 12px;
+        margin-top: 16px;
+      }
 
+      .blog-body {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 1rem;
+        color: #212529;
+        white-space: pre-wrap;
+        margin-top: 20px;
+      }
 
-<% if (locals.user) { %>
- <div class="container mt-3"  >
-   <form action="/blog/comment/<%= blog._id %>"  method="post"   >
-     
-     <div class="form-label">
-       <label for="">Comment</label>
-       <br />
-          <textarea
-          class="form-control"
-          title="body"
-          name="content"
-          placeholder="Enter comment...."
-            id="floatingTextarea"
+      .author-card,
+      .comment-card {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .avatar {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .comment-box {
+        background: #f8f9fa;
+        padding: 16px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
+
+      .future-feature {
+        font-size: 0.8rem;
+        color: #adb5bd;
+      }
+    </style>
+  </head>
+
+  <body>
+    <%- include("partials/navbar.ejs") %>
+
+    <!-- Blog Content -->
+    <div class="container mt-4">
+      <h1 class="fw-bold">
+        <%= blog.title %>
+      </h1>
+
+      <img
+        src="<%= blog.coverImage %>"
+        alt="Blog Cover"
+        class="blog-cover"
+      />
+
+      <div class="blog-body">
+        <%= blog.body %>
+      </div>
+    </div>
+
+    <!-- Author Section -->
+    <div class="container mt-4">
+      <div class="author-card">
+        <img
+          src="<%= blog.createdBY.profileImage %>"
+          alt="Author profile"
+          class="avatar"
+        />
+
+        <div>
+          <h5 class="mb-0">
+            <%= blog.createdBY.fullname %>
+          </h5>
+          <small class="text-muted">
+            Author
+            <span class="future-feature">(Profile Page – Next Feature)</span>
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comment Form -->
+    <% if (locals.user) { %>
+      <div class="container mt-4">
+        <h4>Add a comment</h4>
+
+        <form
+          action="/blog/comment/<%= blog._id %>"
+          method="POST"
+        >
+          <div class="mb-3">
+            <textarea
+              class="form-control"
+              name="content"
+              rows="4"
+              placeholder="Share your thoughts..."
+              required
             ></textarea>
           </div>
-          <button type="submit" name="submit" class="btn btn-primary mt-4">
-            Submit
+
+          <button type="submit" class="btn btn-primary">
+            Post Comment
           </button>
         </form>
       </div>
-      
-      <% } %>
-      
-      
-      <div class="container mt-3"   >
-        <h1>Comments (<%= comments.length %>)</h1>
-        <% comments.forEach(comment => { %>
-          
-          <div class="d-flex align-items-center gap-3 mb-2">
-            <img  
-            src="<%= comment.createdBY.profileImage %>" 
-            width="70px" 
-            height="70px"
-            style="border-radius: 50%; object-fit: cover;"
-        alt="user profile"
-      />
-      <strong><%= comment.createdBY.fullname %></strong>
+    <% } %>
+
+    <!-- Comments Section -->
+    <div class="container mt-5">
+      <h3 class="mb-4">
+        Comments (<%= comments.length %>)
+      </h3>
+
+      <% comments.forEach((comment) => { %>
+        <div class="comment-box">
+          <div class="comment-card mb-2">
+            <img
+              src="<%= comment.createdBY.profileImage %>"
+              alt="User profile"
+              class="avatar"
+            />
+
+            <strong>
+              <%= comment.createdBY.fullname %>
+            </strong>
+
+            <span class="future-feature">
+              (Edit / Delete – Next Feature)
+            </span>
+          </div>
+
+          <div class="blog-body">
+            <%= comment.content %>
+          </div>
+        </div>
+      <% }) %>
     </div>
 
-    <pre style="font-family: Arial, Helvetica, sans-serif; color: black; font-size: medium;">
-<%= comment.content %>
-    </pre>
-
-    <hr>
-
-  <% }) %>
-</div>
-
-      
-    <%- include('partials/script.ejs') %>
-
-</body>
+    <%- include("partials/script.ejs") %>
+  </body>
 </html>

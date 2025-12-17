@@ -1,42 +1,127 @@
-<nav class="navbar navbar-expand-lg bg-dark-subtle">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Blog.io</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll">
+<nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+  <div class="container">
+
+    <!-- Brand -->
+    <a class="navbar-brand fw-bold" href="/">
+      Blog.io
+      <span class="text-primary">✍️</span>
+    </a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarScroll"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarScroll">
-      <ul class="navbar-nav me-auto my-2 my-lg-0">
+      <ul class="navbar-nav me-auto align-items-lg-center gap-lg-2">
 
+        <!-- Home -->
         <li class="nav-item">
-          <a class="nav-link active" href="/">Home</a>
+          <a class="nav-link active fw-semibold" href="/">Home</a>
+        </li>
+
+        <!-- Explore (Future) -->
+        <li class="nav-item">
+          <a class="nav-link disabled">
+            Explore
+            <span class="text-muted small">(Next Feature)</span>
+          </a>
+        </li>
+
+        <!-- Search (Future) -->
+        <li class="nav-item">
+          <a class="nav-link disabled">
+            Search
+            <span class="text-muted small">(Next Feature)</span>
+          </a>
         </li>
 
         <% if (locals.user) { %>
+
+          <!-- Write Blog -->
           <li class="nav-item">
-            <a class="nav-link" href="#">Add Blogs</a>
+            <a class="nav-link fw-semibold" href="#">
+              ✍️ Write
+              <span class="text-muted small">(Editor – Next)</span>
+            </a>
           </li>
 
+        <% } %>
+      </ul>
+
+      <!-- Right Side -->
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+
+        <% if (locals.user) { %>
+
+          <!-- Notifications (Future) -->
+          <li class="nav-item">
+            <a class="nav-link disabled">
+              🔔
+              <span class="text-muted small">(Next)</span>
+            </a>
+          </li>
+
+          <!-- User Dropdown -->
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+            <a
+              class="nav-link dropdown-toggle fw-semibold"
+              data-bs-toggle="dropdown"
+              role="button"
+            >
               <%= user.fullname %>
             </a>
 
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Profile</a></li>
-              <li><a class="dropdown-item" href="/user/logout">Logout</a></li>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+              <li>
+                <a class="dropdown-item disabled">
+                  Profile
+                  <span class="text-muted small">(Next)</span>
+                </a>
+              </li>
+
+              <li>
+                <a class="dropdown-item disabled">
+                  My Blogs
+                  <span class="text-muted small">(Next)</span>
+                </a>
+              </li>
+
+              <li>
+                <a class="dropdown-item disabled">
+                  Settings
+                  <span class="text-muted small">(Next)</span>
+                </a>
+              </li>
+
+              <li><hr class="dropdown-divider" /></li>
+
+              <li>
+                <a class="dropdown-item text-danger" href="/user/logout">
+                  Logout
+                </a>
+              </li>
             </ul>
           </li>
 
         <% } else { %>
-          <li class="nav-item">
-            <a class="nav-link" href="/user/signup">Create Account</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/user/signin">Sign-in</a>
-          </li>
-        <% } %>
 
+          <!-- Auth Links -->
+          <li class="nav-item">
+            <a class="nav-link" href="/user/signin">Sign In</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="btn btn-primary btn-sm" href="/user/signup">
+              Get Started
+            </a>
+          </li>
+
+        <% } %>
       </ul>
     </div>
   </div>

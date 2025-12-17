@@ -22,7 +22,7 @@ app.use(express.static("public"));
 app.use("/uploads", express.static("uploads"));
 
 
-mongoConnect("mongodb://localhost:27017/blog")
+mongoConnect(process.env.MONGO_URL)
   .then(() => {
     console.log("MONGO connected");
   })
