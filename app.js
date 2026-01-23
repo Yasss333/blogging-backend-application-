@@ -41,14 +41,17 @@ async function startServer() {
 startServer();
 
 app.get("/", async (req, res) => {
+  // Redirect to signup if user is not logged in
+  if (!req.user) {
+    return res.redirect('/user/signup');
+  }
+
   try {
     const allBlog = await Blog.find({}).populate('createdBY', 'fullname profileImage');
     
     let savedBlogIds = [];
-    if (req.user) {
-      const user = await require('./Model/user.js').findById(req.user._id);
-      savedBlogIds = user?.savedBlogs?.map(id => id.toString()) || [];
-    }
+    const user = await require('./Model/user.js').findById(req.user._id);
+    savedBlogIds = user?.savedBlogs?.map(id => id.toString()) || [];
 
     return res.render('home', {
       user: req.user,
