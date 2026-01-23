@@ -4,14 +4,11 @@ const { Router } = require("express");
 const router = Router();
 const upload = require("../middleware/upload");
 const Comment=require('../Model/comment.js')
-router.get("/add-new", (req, res) => {
-  return res.render("blog", {
-    user: req.user,
-  });
-});
-
-const { createBlog } = require("../Controller/blog.js");
 const Blog = require("../Model/blog.js");
+const { createBlog, incrementLike,saveBlogHandler,displaysavedBlogs } = require("../Controller/blog.js");
+
+
+
 
 router.get("/add-new", (req, res) => {
   return res.render("blog", { user: req.user });
@@ -46,6 +43,9 @@ router.post("/comment/:blogId",async (req,res)=>{
   });
   return res.redirect(`/blog/${req.params.blogId}`)
 })
+router.get("/saved",displaysavedBlogs);
 
+router.post("/:id/like",incrementLike)
+router.post(":id/save",saveBlogHandler)
 
 module.exports = router;

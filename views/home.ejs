@@ -65,30 +65,39 @@
   </head>
 
   <body>
+    
     <%- include("partials/navbar.ejs") %>
-
+       
     <!-- Top Controls -->
-    <div class="container mt-4">
-      <div class="d-flex justify-content-between align-items-center">
-        <h2 class="fw-bold mb-0">Latest Blogs</h2>
+ <div class="d-flex justify-content-between align-items-center flex-wrap">
+  <div>
+    <h2 class="fw-bold mb-5">Latest Blogs</h2>
+    <p class="text-muted mt-1 mb-0">
+      Discover articles from the community
+    </p>
+  </div>
 
-        <div class="d-flex gap-2">
-          <button class="btn btn-outline-secondary btn-sm" disabled>
-            Filter
-            <span class="future-feature">(Next Feature)</span>
-          </button>
+  <div class="d-flex gap-2 align-items-center">
+    <% if (1) { %>
+      <a
+        href="/blog/add-new"
+        class="btn btn-primary"
+        style="background: linear-gradient(135deg, #bc351d, #6610f2); border: none;"
+      >
+         Create Blog
+      </a>
+    <% } %>
 
-          <button class="btn btn-outline-secondary btn-sm" disabled>
-            Sort
-            <span class="future-feature">(Next Feature)</span>
-          </button>
-        </div>
-      </div>
+    <button class="btn btn-outline-secondary btn-sm" disabled>
+      Filter
+    </button>
 
-      <p class="text-muted mt-1">
-        Discover articles from the community
-      </p>
-    </div>
+    <button class="btn btn-outline-secondary btn-sm" disabled>
+      Sort
+    </button>
+  </div>
+</div>
+
 
     <!-- Blog Grid -->
     <div class="container">
@@ -98,8 +107,8 @@
 
             <!-- Featured Badge -->
             <span class="badge-featured">
-              Featured
-              <span class="future-feature">(Logic Later)</span>
+              Top-Rated
+              <span class="future-feature">(Next )</span>
             </span>
 
             <img
@@ -111,21 +120,19 @@
             <div class="card-body">
               <div class="blog-meta">
                 <span>
-                  By <strong><%= blog.createdBY?.fullname || "Author" %></strong>
+                  By <strong><%= blog.createdBY?.fullname  || "Author" %></strong>
                 </span>
                 <span>
-                  5 min read
-                  <span class="future-feature">(Auto Calc)</span>
+                  <%= Math.ceil(blog.body.length/1000) %> min read blog
                 </span>
               </div>
 
               <h5 class="card-title mb-2">
                 <%= blog.title %>
               </h5>
-
+                
               <p class="text-muted small mb-3">
-                Short description of the blog content goes here...
-                <span class="future-feature">(Excerpt – Next Feature)</span>
+                    <%= blog.body.split(".").slice(0,1).join(".") %>...
               </p>
 
               <div class="d-flex gap-2">
@@ -135,11 +142,12 @@
                 >
                   Read More
                 </a>
+<form action="/blog/<%= blog._id %>/like" method="POST">
+  <button class="btn btn-danger">
+    ♥ Like (<%= blog.likes %>)
+  </button>
+</form>
 
-                <button class="btn btn-outline-secondary" disabled>
-                  ♥
-                  <span class="future-feature">(Like)</span>
-                </button>
 
                 <button class="btn btn-outline-secondary" disabled>
                   🔖
@@ -159,13 +167,13 @@
           <li class="page-item disabled">
             <span class="page-link">
               Previous
-              <span class="future-feature">(Next Feature)</span>
+            
             </span>
           </li>
           <li class="page-item disabled">
             <span class="page-link">
               Next
-              <span class="future-feature">(Next Feature)</span>
+             
             </span>
           </li>
         </ul>

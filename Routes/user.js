@@ -15,7 +15,7 @@ router.get("/logout", (req, res) => {
   res.clearCookie("token"); // NOT the value!
   req.user = null;
   res.locals.user = null;
-  return res.redirect("/");
+  return res.render("signin.ejs");
 }); 
 
 router.post("/signup",handlerUserSignup)

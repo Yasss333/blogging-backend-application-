@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("partials/header.ejs") %>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Saved Blogs</title>
+
+    <style>
+      .blog-card-img {
+        height: 200px;
+        object-fit: cover;
+      }
+
+      .blog-card {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        background: #fff;
+      }
+
+      .blog-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
+      }
+
+      .blog-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 26px;
+        margin-top: 30px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <%- include("partials/navbar.ejs") %>
+
+    <!-- Page Header -->
+    <div class="container mt-4">
+      <h2 class="fw-bold">🔖 Saved Blogs</h2>
+      <p class="text-muted">
+        Blogs you’ve bookmarked to read later
+      </p>
+    </div>
+
+    <!-- Blog Grid -->
+    <div class="container">
+      <% if (blogs.length === 0) { %>
+        <div class="alert alert-info mt-4">
+          You haven’t saved any blogs yet.
+        </div>
+      <% } else { %>
+        <div class="blog-grid">
+          <% blogs.forEach((blog) => { %>
+            <div class="card blog-card">
+
+              <img
+                src="<%= blog.coverImage %>"
+                alt="Blog Image"
+                class="blog-card-img"
+              />
+
+              <div class="card-body">
+                <div class="d-flex justify-content-between text-muted small mb-2">
+                  <span>
+                    By <strong><%= blog.createdBY?.fullname || "Author" %></strong>
+                  </span>
+                  <span>
+                    <%= Math.ceil(blog.body.length / 1000) %> min read
+                  </span>
+                </div>
+
+                <h5 class="card-title">
+                  <%= blog.title %>
+                </h5>
+
+                <p class="text-muted small">
+                  <%= blog.body.split(".").slice(0, 1).join(".") %>...
+                </p>
+
+                <div class="d-flex gap-2">
+                  <a
+                    href="/blog/<%= blog._id %>"
+                    class="btn btn-primary w-100"
+                  >
+                    Read
+                  </a>
+
+                  <!-- Unsave -->
+                  <form action="/blog/<%= blog._id %>/save" method="POST">
+                    <button class="btn btn-outline-danger">
+                      ❌ Unsave
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+
+    <%- include("partials/script.ejs") %>
+  </body>
+</html>

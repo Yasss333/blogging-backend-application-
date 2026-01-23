@@ -4,12 +4,17 @@ const User=require('../Model/user.js');
 
 async function handlerUserSignup(req,res){
   const {fullname ,email ,password } =req.body;
-  await User.create({
+ try {
+   await User.create({
     fullname,
     email,
     password
   })
-   return res.redirect('/')
+   return res.redirect('/')     
+ } catch (error) {
+  console.log("Failed to signup",error.message);
+  
+ }
 }
 
 async function handlerUserSignin(req, res) {

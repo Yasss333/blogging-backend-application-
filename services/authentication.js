@@ -7,7 +7,7 @@ const secret=process.env.SECRET1;
    const payload = {
      _id: user._id,
      email: user.email,
-     profileImage: user.profileImage,
+    //  profileImage: user.profileImage,
      role:user.role,
    };
    const token=jwt.sign(payload,secret);

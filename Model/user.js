@@ -26,6 +26,13 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "/images/image.png",
     },
+    savedBlogs: [
+  {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Blog"
+  }
+],
+
     role: {
       type: String,
       enum: ["USER", "ADMIN"],
