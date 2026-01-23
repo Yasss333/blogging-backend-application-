@@ -7,8 +7,8 @@ router.get("/signin", (req, res) => {
   res.render("signin.ejs", { error: null, user: req.user });
 });
 
-router.get('/signup',(req,res)=>{
-  return res.render("signup.ejs")
+router.get('/signup', (req, res) => {
+  return res.render('signup.ejs', { error: null, user: req.user });
 });
 
 router.get("/logout", (req, res) => {

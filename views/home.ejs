@@ -50,16 +50,16 @@
         color: #adb5bd;
       }
 
-      /* Badge */
-      .badge-featured {
-        position: absolute;
-        top: 12px;
-        left: 12px;
-        background: #0d6efd;
-        color: #fff;
-        font-size: 0.75rem;
-        padding: 4px 8px;
-        border-radius: 6px;
+      .container {
+        max-width: 1200px;
+      }
+      
+      .btn {
+        transition: all 0.2s ease;
+      }
+      
+      .btn:hover {
+        transform: translateY(-1px);
       }
     </style>
   </head>
@@ -71,30 +71,29 @@
     <!-- Top Controls -->
  <div class="d-flex justify-content-between align-items-center flex-wrap">
   <div>
-    <h2 class="fw-bold mb-5">Latest Blogs</h2>
+    <h2 class="fw-bold mb-3">Latest Blogs</h2>
     <p class="text-muted mt-1 mb-0">
       Discover articles from the community
     </p>
   </div>
 
   <div class="d-flex gap-2 align-items-center">
-    <% if (1) { %>
+    <% if (locals.user) { %>
       <a
         href="/blog/add-new"
         class="btn btn-primary"
         style="background: linear-gradient(135deg, #bc351d, #6610f2); border: none;"
       >
-         Create Blog
+        ✍️ Create Blog
+      </a>
+    <% } else { %>
+      <a
+        href="/user/signin"
+        class="btn btn-outline-primary"
+      >
+        Sign In to Create Blog
       </a>
     <% } %>
-
-    <button class="btn btn-outline-secondary btn-sm" disabled>
-      Filter
-    </button>
-
-    <button class="btn btn-outline-secondary btn-sm" disabled>
-      Sort
-    </button>
   </div>
 </div>
 
@@ -105,25 +104,29 @@
         <% blog.forEach((blog) => { %>
           <div class="card blog-card">
 
-            <!-- Featured Badge -->
-            <span class="badge-featured">
-              Top-Rated
-              <span class="future-feature">(Next )</span>
-            </span>
 
-            <img
-              src="<%= blog.coverImage %>"
-              alt="Blog Image"
-              class="blog-card-img"
-            />
+            <% if (blog.coverImage) { %>
+              <img
+                src="<%= blog.coverImage %>"
+                alt="Blog Image"
+                class="blog-card-img"
+                onerror="this.src='/images/image.png'"
+              />
+            <% } else { %>
+              <img
+                src="/images/image.png"
+                alt="Blog Image"
+                class="blog-card-img"
+              />
+            <% } %>
 
             <div class="card-body">
               <div class="blog-meta">
                 <span>
-                  By <strong><%= blog.createdBY?.fullname  || "Author" %></strong>
+                  By <strong><%= blog.createdBY?.fullname || "Author" %></strong>
                 </span>
                 <span>
-                  <%= Math.ceil(blog.body.length/1000) %> min read blog
+                  <%= Math.ceil((blog.body?.length || 0) / 1000) || 1 %> min read
                 </span>
               </div>
 
@@ -132,27 +135,39 @@
               </h5>
                 
               <p class="text-muted small mb-3">
-                    <%= blog.body.split(".").slice(0,1).join(".") %>...
+                <%= blog.body ? (blog.body.split(".").slice(0, 1).join(".") + "...") : "No description available" %>
               </p>
 
-              <div class="d-flex gap-2">
+              <div class="d-flex gap-2 flex-wrap">
                 <a
                   href="/blog/<%= blog._id %>"
-                  class="btn btn-primary w-100"
+                  class="btn btn-primary flex-grow-1"
                 >
                   Read More
                 </a>
-<form action="/blog/<%= blog._id %>/like" method="POST">
-  <button class="btn btn-danger">
-    ♥ Like (<%= blog.likes %>)
-  </button>
-</form>
+                
+                <form action="/blog/<%= blog._id %>/like" method="POST" class="d-inline">
+                  <button type="submit" class="btn btn-danger">
+                    ♥ Like (<%= blog.likes || 0 %>)
+                  </button>
+                </form>
 
-
-                <button class="btn btn-outline-secondary" disabled>
-                  🔖
-                  <span class="future-feature">(Save)</span>
-                </button>
+                <% if (locals.user) { %>
+                  <% const isSaved = savedBlogIds.includes(blog._id.toString()); %>
+                  <form action="/blog/<%= blog._id %>/save" method="POST" class="d-inline">
+                    <button 
+                      type="submit" 
+                      class="btn <%= isSaved ? 'btn-success' : 'btn-outline-primary' %>"
+                      title="<%= isSaved ? 'Unsave blog' : 'Save blog' %>"
+                    >
+                      <%= isSaved ? '🔖 Saved' : '🔖 Save' %>
+                    </button>
+                  </form>
+                <% } else { %>
+                  <a href="/user/signin" class="btn btn-outline-secondary">
+                    🔖 Save
+                  </a>
+                <% } %>
               </div>
             </div>
           </div>

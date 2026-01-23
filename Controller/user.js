@@ -2,19 +2,23 @@
 const User=require('../Model/user.js');
 
 
-async function handlerUserSignup(req,res){
-  const {fullname ,email ,password } =req.body;
- try {
-   await User.create({
-    fullname,
-    email,
-    password
-  })
-   return res.redirect('/')     
- } catch (error) {
-  console.log("Failed to signup",error.message);
-  
- }
+async function handlerUserSignup(req, res) {
+  const { fullname, email, password } = req.body;
+  try {
+    await User.create({
+      fullname,
+      email,
+      password,
+    });
+    return res.redirect('/user/signin');
+  } catch (error) {
+    console.log("Failed to signup:", error.message);
+    return res.status(400).render('signup.ejs', {
+      error: error.message.includes('duplicate') 
+        ? 'Email already exists' 
+        : 'Signup failed. Please try again.',
+    });
+  }
 }
 
 async function handlerUserSignin(req, res) {

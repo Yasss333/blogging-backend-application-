@@ -8,20 +8,23 @@
     <title>Blog App</title>
 
     <style>
+
+      .blog-body {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 1.1rem;
+        color: #212529;
+        white-space: pre-wrap;
+        line-height: 1.8;
+        margin-top: 20px;
+      }
+      
       .blog-cover {
         width: 100%;
         max-height: 420px;
         object-fit: cover;
         border-radius: 12px;
         margin-top: 16px;
-      }
-
-      .blog-body {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 1rem;
-        color: #212529;
-        white-space: pre-wrap;
-        margin-top: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       }
 
       .author-card,
@@ -43,6 +46,15 @@
         padding: 16px;
         border-radius: 10px;
         margin-bottom: 20px;
+        transition: box-shadow 0.2s ease;
+      }
+      
+      .comment-box:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      .container {
+        max-width: 900px;
       }
 
       .future-feature {
@@ -57,17 +69,46 @@
 
     <!-- Blog Content -->
     <div class="container mt-4">
-      <h1 class="fw-bold">
-        <%= blog.title %>
-      </h1>
+      <div class="d-flex justify-content-between align-items-start mb-3">
+        <h1 class="fw-bold flex-grow-1">
+          <%= blog.title %>
+        </h1>
+        
+        <div class="d-flex gap-2 ms-3">
+          <form action="/blog/<%= blog._id %>/like" method="POST" class="d-inline">
+            <button type="submit" class="btn btn-danger btn-sm">
+              ♥ Like (<%= blog.likes || 0 %>)
+            </button>
+          </form>
+          
+          <% if (locals.user) { %>
+            <form action="/blog/<%= blog._id %>/save" method="POST" class="d-inline">
+              <button 
+                type="submit" 
+                class="btn <%= isSaved ? 'btn-success' : 'btn-outline-primary' %> btn-sm"
+                title="<%= isSaved ? 'Unsave blog' : 'Save blog' %>"
+              >
+                <%= isSaved ? '🔖 Saved' : '🔖 Save' %>
+              </button>
+            </form>
+          <% } else { %>
+            <a href="/user/signin" class="btn btn-outline-secondary btn-sm">
+              🔖 Save
+            </a>
+          <% } %>
+        </div>
+      </div>
 
-      <img
-        src="<%= blog.coverImage %>"
-        alt="Blog Cover"
-        class="blog-cover"
-      />
+      <% if (blog.coverImage) { %>
+        <img
+          src="<%= blog.coverImage %>"
+          alt="Blog Cover"
+          class="blog-cover"
+          onerror="this.src='/images/image.png'"
+        />
+      <% } %>
 
-      <div class="blog-body">
+      <div class="blog-body mt-4">
         <%= blog.body %>
       </div>
     </div>

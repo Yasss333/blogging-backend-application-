@@ -57,11 +57,20 @@
           <% blogs.forEach((blog) => { %>
             <div class="card blog-card">
 
-              <img
-                src="<%= blog.coverImage %>"
-                alt="Blog Image"
-                class="blog-card-img"
-              />
+              <% if (blog.coverImage) { %>
+                <img
+                  src="<%= blog.coverImage %>"
+                  alt="Blog Image"
+                  class="blog-card-img"
+                  onerror="this.src='/images/image.png'"
+                />
+              <% } else { %>
+                <img
+                  src="/images/image.png"
+                  alt="Blog Image"
+                  class="blog-card-img"
+                />
+              <% } %>
 
               <div class="card-body">
                 <div class="d-flex justify-content-between text-muted small mb-2">
@@ -90,8 +99,8 @@
                   </a>
 
                   <!-- Unsave -->
-                  <form action="/blog/<%= blog._id %>/save" method="POST">
-                    <button class="btn btn-outline-danger">
+                  <form action="/blog/<%= blog._id %>/save" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-outline-danger">
                       ❌ Unsave
                     </button>
                   </form>
