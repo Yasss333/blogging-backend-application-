@@ -8,8 +8,10 @@ const blogRoutes = require('./Routes/blog.js');
 const cookieparser = require('cookie-parser');
 const { verifyjwt } = require('./services/verifyjwt.js');
 const Blog = require('./Model/blog.js');
+const helmet =require('helmet')
 
 dotenv.config();
+app.use(helmet({ contentSecurityPolicy: false }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
